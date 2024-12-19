@@ -17,7 +17,7 @@ def main():
         EndPag = int(input(f"Select the end page form {StartPag +2 } - {totalPag}"))
 
         if StartPag < 0 or EndPag > totalPag or StartPag >= EndPag:
-            print("Rango de paginas invalido")
+            print("Invalid page range")
             return
     
     except:
@@ -38,18 +38,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-"""
-book = askopenfilename()
-
-pdfreader = PdfReader(book)
-pages = len(pdfreader.pages)
-
-player = pyttsx3.init()
-
-for num in range(0, pages):
-    page = pdfreader.pages[num]
-    text = page.extract_text()
-    player.say(text)
-
-player.runAndWait()
-"""
