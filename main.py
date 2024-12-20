@@ -1,17 +1,40 @@
 import pyttsx3
-from PyPDF2 import PdfReader
+import fitz
 from tkinter.filedialog import *
 
-book = askopenfilename()
+def main():
+    book = askopenfilename(title="Select an PDF document", filetypes=[("PDF Files","*.pdf")])
+    if not book:
+        print("document not selected.")
+        return
+    
+    pdfDoc = fitz.open(book)
+    totalPag = len(pdfDoc)
+    print(f"This document have {totalPag} pages.")
 
-pdfreader = PdfReader(book)
-pages = len(pdfreader.pages)
+    try:
+        StartPag = int(input(f"Select the start page from 1 - {totalPag}: ")) - 1
+        EndPag = int(input(f"Select the end page form {StartPag +2 } - {totalPag}"))
 
-player = pyttsx3.init()
+        if StartPag < 0 or EndPag > totalPag or StartPag >= EndPag:
+            print("Invalid page range")
+            return
+    
+    except:
+        print("Use numbers.")
+        return
 
-for num in range(0, pages):
-    page = pdfreader.pages[num]
-    text = page.extract_text()
-    player.say(text)
+    player = pyttsx3.init()
 
-player.runAndWait()
+    for num in range(StartPag, EndPag):
+        page = pdfDoc[num]
+        text = page.get_text()
+        print(f"Reading page {num + 1}...\n{text}\n")
+        player.say(text)
+
+    player.runAndWait()
+    print("Reading complete")
+
+
+if __name__ == "__main__":
+    main()
